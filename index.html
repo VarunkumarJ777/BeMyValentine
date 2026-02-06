@@ -13,6 +13,7 @@
       --accent-2: #fbbc73;
       --text: #2f3a45;
       --muted: #51606c;
+      --gold: #d4af37;
     }
     * { box-sizing: border-box; }
     body {
@@ -61,6 +62,10 @@
       margin: 0 0 12px;
       font-size: clamp(26px, 4vw, 34px);
       letter-spacing: 0.5px;
+    }
+    .gold {
+      color: var(--gold);
+      font-weight: 800;
     }
     p {
       margin: 0 0 24px;
@@ -228,7 +233,7 @@
   <div class="card" id="card">
     <div class="floating one"></div>
     <div class="floating two"></div>
-    <h1>Hey Anusha, will you be my Valentine?</h1>
+    <h1>Hey <span class="gold">Gold</span>, will you be my Valentine?</h1>
     <p>Just one click away. I dare you to try hitting "No".</p>
     <div class="buttons">
       <button class="yes hidden" id="yesBtn">Yes! 💕</button>
