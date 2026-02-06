@@ -131,8 +131,9 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .gif-panel img {
-      width: 500px;
-      height: 500px;
+      width: min(320px, 90vw);
+      height: auto;
+      aspect-ratio: 1 / 1;
       object-fit: cover;
       border-radius: 16px;
       border: 1px solid rgba(79, 181, 156, 0.18);
@@ -150,6 +151,11 @@
       margin-top: 14px;
       font-size: 12px;
       color: rgba(47, 58, 69, 0.55);
+    }
+    .footer {
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(47, 58, 69, 0.6);
     }
     .hidden { display: none; }
     .yes {
@@ -222,7 +228,7 @@
   <div class="card" id="card">
     <div class="floating one"></div>
     <div class="floating two"></div>
-    <h1>Hey Gold, Will you be my Valentine?</h1>
+    <h1>Hey Anusha, will you be my Valentine?</h1>
     <p>Just one click away. I dare you to try hitting "No".</p>
     <div class="buttons">
       <button class="yes hidden" id="yesBtn">Yes! 💕</button>
@@ -230,6 +236,7 @@
     </div>
     <div class="accept-msg" id="acceptMsg">Knew it. You said yes! 🎉</div>
     <div class="gif-panel" id="gifPanel"></div>
+    <div class="footer">Made by Varun for Anusha — feel free to reuse and share the love.</div>
   </div>
   <script>
     const noBtn = document.getElementById("noBtn");
