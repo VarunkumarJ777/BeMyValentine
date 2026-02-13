@@ -31,7 +31,7 @@
     }
     .card {
       position: relative;
-      width: min(500px, 92vw);
+      width: min(600px, 92vw);
       padding: 32px;
       border-radius: 24px;
       background: var(--card);
@@ -125,7 +125,7 @@
     .gif-panel {
       margin-top: 26px;
       display: none;
-      gap: 12px;
+      gap: 16px;
       justify-content: center;
       flex-wrap: wrap;
       animation: pop 0.35s ease;
@@ -136,13 +136,15 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .gif-panel img {
-      width: min(320px, 90vw);
-      height: auto;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
+      width: min(480px, 95vw);
+      height: min(480px, 75vh);
+      object-fit: cover;            /* fill box, no letterbox */
+      object-position: center 60%;  /* keep lower text visible */
+      background: transparent;
       border-radius: 16px;
       border: 1px solid rgba(79, 181, 156, 0.18);
       box-shadow: 0 10px 24px rgba(47, 58, 69, 0.15);
+      transition: opacity 0.5s ease;
     }
     .accept-msg {
       margin-top: 18px;
@@ -152,6 +154,30 @@
       display: none;
     }
     .accept-msg.visible { display: block; }
+    .love-forever {
+      width: 100%;
+      text-align: center;
+      margin-top: 14px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .love-forever.show {
+      animation: riseIn 0.8s ease forwards, bounceGlow 1.6s ease-in-out 0.2s infinite;
+    }
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes bounceGlow {
+      0%   { transform: translateY(0); color: #ff6fa3; text-shadow: 0 4px 18px rgba(255, 111, 163, 0.3); }
+      25%  { transform: translateY(-6px); color: #ffb347; text-shadow: 0 6px 20px rgba(255, 179, 71, 0.35); }
+      50%  { transform: translateY(0); color: #6dd5ed; text-shadow: 0 4px 18px rgba(109, 213, 237, 0.3); }
+      75%  { transform: translateY(-5px); color: #a17fe0; text-shadow: 0 6px 20px rgba(161, 127, 224, 0.35); }
+      100% { transform: translateY(0); color: #ff6fa3; text-shadow: 0 4px 18px rgba(255, 111, 163, 0.3); }
+    }
     .hint {
       margin-top: 14px;
       font-size: 12px;
@@ -233,7 +259,7 @@
   <div class="card" id="card">
     <div class="floating one"></div>
     <div class="floating two"></div>
-    <h1>Hey <span class="gold">Gold</span>, will you be my Valentine?</h1>
+    <h1>Hey <span class="gold">Gold</span>, will you be my Valentine for the rest of my life?</h1>
     <p>Just one click away. I dare you to try hitting "No".</p>
     <div class="buttons">
       <button class="yes hidden" id="yesBtn">Yes! 💕</button>
@@ -241,7 +267,6 @@
     </div>
     <div class="accept-msg" id="acceptMsg">Knew it. You said yes! 🎉</div>
     <div class="gif-panel" id="gifPanel"></div>
-    <div class="footer">Made by Varun for Anusha — feel free to reuse and share the love.</div>
   </div>
   <script>
     const noBtn = document.getElementById("noBtn");
@@ -257,6 +282,7 @@
     document.body.appendChild(loveMsg);
 
     const gifs = [
+      "./iknewit.gif",
       "./IMG_8136.JPG",
     ];
 
@@ -275,13 +301,34 @@
     }
 
     function showGifs() {
-      if (gifPanel.children.length === 0) {
-        gifs.slice(0, 4).forEach(url => {
-          const img = document.createElement("img");
-          img.src = url;
-          img.alt = "Happy gif";
-          gifPanel.appendChild(img);
-        });
+      if (!gifPanel.firstElementChild) {
+        const img = document.createElement("img");
+        img.src = gifs[0];
+        img.alt = "Happy gif";
+        img.style.opacity = "0";
+        img.onload = () => requestAnimationFrame(() => img.style.opacity = "1");
+        gifPanel.appendChild(img);
+
+        const loveLine = document.createElement("div");
+        loveLine.className = "love-forever";
+        loveLine.textContent = "Love you forever.";
+        gifPanel.appendChild(loveLine);
+
+        // Preload the second gif/image and swap after 3 seconds.
+        if (gifs[1]) {
+          const nextImg = new Image();
+          nextImg.src = gifs[1];
+          setTimeout(() => {
+            img.style.opacity = "0";
+            setTimeout(() => {
+              img.src = nextImg.src;
+              img.onload = () => {
+                requestAnimationFrame(() => img.style.opacity = "1");
+                loveLine.classList.add("show");
+              };
+            }, 400); // brief fade gap
+          }, 3000);
+        }
       }
       acceptMsg.classList.add("visible");
       gifPanel.classList.add("visible");
@@ -297,7 +344,7 @@
     setTimeout(() => {
       yesBtn.classList.remove("hidden");
       yesBtn.classList.add("visible");
-    }, 8000);
+    }, 10000);
 
     function burstHearts(count = 18) {
       for (let i = 0; i < count; i++) {
